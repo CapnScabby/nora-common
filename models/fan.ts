@@ -1,18 +1,32 @@
 import { BaseDevice } from './device';
 import { OnOffState } from './states/onoff';
-import ( fanSpeedModeState, availableFanModes ) from './states/fanspeedmode';
-import { fanSpeedPercentState } from './states/fanspeedpercent';
+import { FanSpeedModeState, FanSpeedMode } from './states/fanspeedmode';
+import { FanSpeedPercentState } from './states/fanspeedpercent';
 
-export type FanDevice = BaseDevice & {
+interface FanBase {
     type: 'fan';
     fanSpeedControl: false;
     state: OnOffState;
-};
+}
 
-export type FanDeviceWithFanSpeed = BaseDevice & {
-    type: 'fan`';
+interface FanDeviceWithFanSpeedPercent {
+    type: 'fan';
     fanSpeedControl: true;
-    availableSpeeds: availableFanSpeeds[];
-    S1_Name: 
-    state: FanSpeedState & OnOffState;
-};
+    state: FanSpeedPercentState & OnOffState;
+}
+
+interface FanDeviceWithFanSpeedMode {
+    type: 'fan';
+    fanSpeedControl: true;
+    availableFanSpeedModes: FanSpeedMode[];
+    state: FanSpeedModeState & OnOffState;
+}
+
+interface FanDeviceWithFanSpeedModeAndFanSpeedPercent {
+    type: 'fan';
+    fanSpeedControl: true;
+    availableFanSpeedModes: FanSpeedMode[];
+    state: FanSpeedPercentState & FanSpeedModeState & OnOffState;
+}
+
+export type FanDevice = BaseDevice & (FanBase | FanDeviceWithFanSpeedPercent | FanDeviceWithFanSpeedMode | FanDeviceWithFanSpeedModeAndFanSpeedPercent);
